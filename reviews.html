@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reviews - My Cafe</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body class="elegant-bg">
+  <header class="elegant-header">
+    <h1 class="elegant-title">Customer Reviews</h1>
+  </header>
+  <main class="elegant-main">
+    <section class="elegant-section">
+      <h2>Leave a review</h2>
+      <form id="review-form">
+        <label>Name<br><input type="text" id="r-name" placeholder="Your name"></label><br>
+  <label>Phone<br><input type="tel" id="r-phone" placeholder="Your phone number" required></label><br>
+        <label>Rating<br>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div class="beans" id="bean-rating" role="radiogroup" aria-label="Rating">
+              <button type="button" class="bean-btn" data-value="1">☕</button>
+              <button type="button" class="bean-btn" data-value="2">☕</button>
+              <button type="button" class="bean-btn" data-value="3">☕</button>
+              <button type="button" class="bean-btn" data-value="4">☕</button>
+              <button type="button" class="bean-btn" data-value="5">☕</button>
+            </div>
+            <div style="font-weight:700;color:#8c5f35;">Rating: <span id="r-rating-display">5</span></div>
+          </div>
+          <input type="hidden" id="r-rating" value="5">
+        </label><br>
+        <label>Comment<br><textarea id="r-comment" rows="4" placeholder="Tell us what you liked"></textarea></label><br>
+        <label>Which item did you like the most?<br>
+          <select id="r-favorite">
+            <option value="">-- Choose an item --</option>
+            <option value="Latte">Latte</option>
+            <option value="Iced Mocha">Iced Mocha</option>
+            <option value="Mango Matcha">Mango Matcha</option>
+            <option value="Americano">Americano</option>
+            <option value="Tea">Tea</option>
+            <option value="Dessert">Dessert</option>
+          </select>
+        </label><br>
+        <button class="elegant-btn" id="r-submit">Submit review</button>
+      </form>
+    </section>
+
+    <section class="elegant-section">
+      <h2>Recent reviews</h2>
+      <div id="reviews-list">Loading...</div>
+    </section>
+  </main>
+
+    </section>
+  </main>
+
+  <script defer src="script.js"></script>
+</body>
+</html>
+</body>
+</html>

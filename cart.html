@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Cafe - Cart</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>My Cafe</h1>
+    <nav>
+      <a href="index.html">Home</a>
+    </nav>
+  </header>
+  <main>
+    <section id="cart-section">
+      <h2>Your Cart</h2>
+      <ul id="cart-items"></ul>
+      <p>Total: $<span id="cart-total">0</span></p>
+      <button onclick="checkout()">Order Now</button>
+    </section>
+  </main>
+  <footer>
+    &copy; 2025 My Cafe
+  </footer>
+  <script>
+    let cart = [];
+    let total = 0;
+    function displayCart() {
+      let cartList = document.getElementById("cart-items");
+      let cartTotal = document.getElementById("cart-total");
+      cartList.innerHTML = "";
+      cart.forEach((entry, index) => {
+        cartList.innerHTML += `
+          <li style="display:flex;align-items:center;gap:10px;">
+            <img src="${entry.img}" alt="${entry.item}" style="width:40px;height:40px;object-fit:cover;border-radius:6px;">
+            <span>${entry.item} - $${entry.price} x${entry.count}</span>
+            ${entry.note ? `<span style='font-size:0.9em;color:#888;'>(Note: ${entry.note})</span>` : ""}
+            <button onclick="deleteCartItem(${index})" style="margin-left:auto;background:#e74c3c;color:#fff;border:none;padding:4px 8px;border-radius:4px;cursor:pointer;">Delete</button>
+          </li>`;
+      });
+      cartTotal.textContent = total;
+    }
+    function deleteCartItem(index) {
+      total -= cart[index].price * cart[index].count;
+      cart.splice(index, 1);
+      displayCart();
+      localStorage.setItem('cart', JSON.stringify(cart));
+      localStorage.setItem('cartTotal', total);
+    }
+    function checkout() {
+      window.location.href = "contact.html";
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      if (localStorage.getItem('cart')) {
+        cart = JSON.parse(localStorage.getItem('cart'));
+        total = parseFloat(localStorage.getItem('cartTotal')) || 0;
+        displayCart();
+      }
+    });
+  </script>
+</body>
+</html>

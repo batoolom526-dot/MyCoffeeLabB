@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact My Cafe</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header>
+  <h1 style="color:#D4AF37;text-shadow:2px 2px 0 #4B2E2E;letter-spacing:1px;">Contact Information</h1>
+  <nav class="top-nav">
+    <a href="index.html" class="top-nav-btn">Home</a>
+    <a href="about.html" class="top-nav-btn">About Us</a>
+    <a href="contact.html" class="top-nav-btn">Contact</a>
+  </nav>
+</header>
+
+<main>
+  <div style="max-width:520px;margin:40px auto;background:#fff8f0;padding:32px 28px;border-radius:18px;box-shadow:0 8px 32px rgba(0,0,0,0.10);">
+    <form action= "https://formspree.io/f/mjkarwaj" method="POST" style="display:flex;flex-direction:column;gap:18px;">
+      <label style="font-weight:600;color:#4B2E2E;">Name:</label>
+      <input type="text" name="name" required>
+
+    <label style="font-weight:600;color:#4B2E2E;">Email (optional):</label>
+    <input type="email" name="email">
+
+  <label style="font-weight:600;color:#4B2E2E;">Phone Number (required):</label>
+  <input type="tel" name="phone" required>
+
+      <label style="font-weight:600;color:#4B2E2E;">Message:</label>
+      <textarea name="message"></textarea>
+
+      <button type="submit" id="place-order" class="top-nav-btn" style="margin-top:10px;">Place Order</button>
+    </form>
+
+    <section style="margin-top:38px;">
+      <h2 style="color:#4B2E2E;display:flex;align-items:center;gap:10px;font-size:1.3em;margin-bottom:18px;">
+        <i class="bi bi-wallet2" style="color:#D4AF37;font-size:1.4em;"></i> Payment Methods
+      </h2>
+      <div style="display:flex;gap:24px;justify-content:center;margin-bottom:18px;">
+        <button id="pay-cash" class="top-nav-btn" type="button" style="display:flex;align-items:center;gap:8px;">
+          <i class="bi bi-cash-coin" style="font-size:1.2em;"></i> Cash
+        </button>
+        <button id="pay-card" class="top-nav-btn" type="button" style="display:flex;align-items:center;gap:8px;">
+          <i class="bi bi-credit-card-2-back" style="font-size:1.2em;"></i> Card
+        </button>
+      </div>
+      <div id="payment-reminder" aria-live="polite" style="text-align:center;color:#8c5f35;font-weight:700;margin-bottom:12px;">Please choose Cash or Card to continue.</div>
+      <div id="card-fields" style="display:none;background:#fffbe8;padding:18px 16px;border-radius:12px;box-shadow:0 2px 8px #d4af3722;max-width:340px;margin:0 auto;">
+        <label style="font-weight:600;color:#4B2E2E;">Cardholder Name</label>
+        <input type="text" placeholder="Name on Card" style="margin-bottom:10px;">
+        <label style="font-weight:600;color:#4B2E2E;">Card Number</label>
+        <input type="text" maxlength="19" placeholder="1234 5678 9012 3456" style="margin-bottom:10px;">
+        <div style="display:flex;gap:12px;">
+          <div style="flex:1;">
+            <label style="font-weight:600;color:#4B2E2E;">Expiry</label>
+            <input type="text" maxlength="5" placeholder="MM/YY">
+          </div>
+          <div style="flex:1;">
+            <label style="font-weight:600;color:#4B2E2E;">CVV</label>
+            <input type="text" maxlength="4" placeholder="CVV">
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="thankyou-modal" style="display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.4);z-index:1000;justify-content:center;align-items:center;">
+    <div style="background:#fff;padding:32px 24px;border-radius:16px;max-width:350px;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,0.18);position:relative;">
+      <h2>Thank You!</h2>
+      <p>Your order has been placed.<br>We will contact you soon.<br><span style="font-size:2em;">😊</span></p>
+      <p style="margin-top:18px;font-size:1.1em;color:#4B2E2E;font-weight:500;">Estimated ready time: <span id="order-ready-time" style="color:#D4AF37;font-weight:700;">15-20 minutes</span></p>
+      <button onclick="closeThankYouModal()" style="background:#D4AF37;color:#fff;padding:8px 18px;border:none;border-radius:6px;cursor:pointer;margin-top:10px;">Close</button>
+    </div>
+  </div>
+<script>
+document.querySelector('form').addEventListener('submit', function(e) {
+  e.preventDefault();
+  var form = this;
+  var data = new FormData(form);
+  var name = form.querySelector('input[name="name"]').value.trim();
+  var email = form.querySelector('input[name="email"]').value.trim();
+  var phone = form.querySelector('input[name="phone"]').value.trim();
+  // require name and phone (email optional)
+  if (!name || !phone) {
+    alert('Please fill in your name and phone number before placing your order.');
+    return;
+  }
+  // require payment selection (client-side only)
+  var usingCash = document.getElementById('pay-cash').dataset.selected === 'true';
+  var usingCard = document.getElementById('pay-card').dataset.selected === 'true';
+  if (!usingCash && !usingCard) {
+    // update inline reminder instead of server-side error
+    var remind = document.getElementById('payment-reminder');
+    if (remind) remind.textContent = 'Please select a payment method (Cash or Card) to continue.';
+    alert('Please choose a payment method (Cash or Card) before placing your order.');
+    return;
+  }
+
+  // Try to identify the user in the backend/CRM before submitting
+  var payload = {
+    name: name,
+    email: email,
+    phone: phone,
+    userId: localStorage.getItem('mc_user_id') || undefined
+  };
+
+  fetch('/api/identify', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).catch(function(err) {
+    console.warn('identify failed', err);
+  }).finally(function() {
+    // Always continue to submit to Formspree so existing behavior remains
+    fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    }).then(function(response) {
+      if (response.ok) {
+        document.getElementById('thankyou-modal').style.display = 'flex';
+        var readyTime = document.getElementById('order-ready-time');
+        if (readyTime) {
+          readyTime.textContent = '15-20 minutes';
+        }
+        form.reset();
+      } else {
+        response.json().then(function(data) {
+          alert(data.error || 'There was a problem submitting your order.');
+        });
+      }
+    }).catch(function(error) {
+      alert('There was a problem submitting your order.');
+    });
+  });
+});
+
+function closeThankYouModal() {
+  document.getElementById('thankyou-modal').style.display = 'none';
+}
+
+document.getElementById('pay-cash').onclick = function() {
+  document.getElementById('card-fields').style.display = 'none';
+  this.dataset.selected = 'true';
+  this.classList.add('top-nav-btn');
+  this.style.background = '#D4AF37';
+  document.getElementById('pay-card').style.background = '#4B2E2E';
+  document.getElementById('pay-card').style.color = '#fff6e5';
+  this.style.color = '#4B2E2E';
+  document.getElementById('pay-card').dataset.selected = 'false';
+  // update frontend-only reminder
+  var rem = document.getElementById('payment-reminder'); if (rem) rem.textContent = 'You selected: Cash. Please have exact change ready.';
+};
+document.getElementById('pay-card').onclick = function() {
+  document.getElementById('card-fields').style.display = 'block';
+  this.dataset.selected = 'true';
+  this.classList.add('top-nav-btn');
+  this.style.background = '#D4AF37';
+  this.style.color = '#4B2E2E';
+  document.getElementById('pay-cash').style.background = '#4B2E2E';
+  document.getElementById('pay-cash').style.color = '#fff6e5';
+  document.getElementById('pay-cash').dataset.selected = 'false';
+  var rem = document.getElementById('payment-reminder'); if (rem) rem.textContent = 'You selected: Card. Enter card details below.';
+};
+</script>
+</main>
+</body>
+</html>

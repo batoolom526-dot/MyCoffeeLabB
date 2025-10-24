@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"name": "My Cafe",
+			"path": "."
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "My Cafe"
+	}
+}

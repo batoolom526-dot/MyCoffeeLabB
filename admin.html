@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Smart Cafe — Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header admin-header">
+    <div class="brand">
+      <h1>Smart Café — Admin</h1>
+    </div>
+    <nav class="top-nav">
+      <a href="index.html" class="nav-btn">Public Site</a>
+      <button id="logout-btn" class="nav-btn" style="display:none">Logout</button>
+    </nav>
+  </header>
+
+  <main class="container admin-panel" id="admin-panel" style="display:none">
+    <section class="admin-controls">
+      <h2>Orders</h2>
+      <div class="admin-actions">
+        <button id="refresh-orders" class="btn outline">Refresh</button>
+        <button id="export-orders" class="btn gold">Export CSV</button>
+      </div>
+      <table id="orders-table" class="table">
+        <thead>
+          <tr><th>#</th><th>Items</th><th>Customer</th><th>Note</th><th>Total</th><th>Actions</th></tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+
+    <section class="admin-messages">
+      <h2>Messages</h2>
+      <ul id="messages-list" class="messages"></ul>
+    </section>
+  </main>
+
+  <div id="login-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <h3>Owner Login</h3>
+      <p class="subtle">Enter the admin password to access the CRM.</p>
+      <input id="admin-password" type="password" placeholder="Password" class="text-input" />
+      <div class="modal-actions">
+        <button id="login-btn" class="btn primary">Login</button>
+      </div>
+      <p class="subtle note">Hint: you can change the admin password inside <code>script.js</code> near the top.</p>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin Panel</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h2>Admin Dashboard</h2>
+
+<div id="loginSection">
+  <input type="password" id="adminPass" placeholder="Enter admin password">
+  <button onclick="checkAdmin()">Login</button>
+</div>
+
+<div id="adminContent" style="display:none;">
+  <h3>Orders</h3>
+  <table border="1" id="ordersTable">
+    <thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>Items</th><th>Total</th><th>Message</th></tr></thead>
+    <tbody></tbody>
+  </table>
+  <button onclick="exportOrdersCSV()">Export CSV</button>
+
+  <h3>Customer Reviews</h3>
+  <div id="reviews"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
